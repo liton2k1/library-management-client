@@ -2,7 +2,6 @@
 
 import React from "react";
 import type { IBook } from "@/types/types";
-import { NavLink } from "react-router";
 import { Button } from "./ui/button";
 import {
   Table,
@@ -12,6 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
+import { NavLink } from "react-router";
+import ConfirmDialog from "./ConfirmDialog";
+// import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
+// import Link from "next/link";
 
 interface BookTableProps {
   books: IBook[];
@@ -44,24 +47,23 @@ const BookTable: React.FC<BookTableProps> = ({ books, onDelete, onBorrow }) => {
             <TableCell>{book.available ? "Yes" : "No"}</TableCell>
             <TableCell className="flex gap-2">
               <NavLink to={`/edit-book/${book._id}`}>
-                <Button size="sm" variant="outline">
-                  Edit
+                <Button size="sm" variant="outline">Edit</Button>
+              </NavLink>
+
+              <ConfirmDialog
+                onConfirm={() => onDelete(book._id)}
+                trigger={<Button size="sm" variant="destructive">Delete</Button>}
+              />
+
+              <NavLink to={`/borrow-book/${book._id}`}>
+                <Button
+                  size="sm"
+                  onClick={() => onBorrow(book)}
+                  disabled={!book.available || book.copies === 0}
+                >
+                  Borrow
                 </Button>
               </NavLink>
-              <Button
-                size="sm"
-                variant="destructive"
-                onClick={() => onDelete(book._id)}
-              >
-                Delete
-              </Button>
-              <Button
-                size="sm"
-                onClick={() => onBorrow(book)}
-                disabled={!book.available || book.copies === 0}
-              >
-                Borrow
-              </Button>
             </TableCell>
           </TableRow>
         ))}

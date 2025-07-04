@@ -9,6 +9,18 @@ export interface IBook {
   available: boolean;
 }
 
+export interface IBookResponse {
+  success: boolean;
+  message: string;
+  data: IBook[];
+}
+
+export interface ISingleBookResponse {
+  success: boolean;
+  message: string;
+  data: IBook;
+}
+
 export interface IBookRequest {
   title: string;
   author: string;
@@ -22,10 +34,4 @@ export interface IBorrowSummary {
     title: string;
     isbn: string;
     totalBorrowed: number;
-}
-
-export interface IBookResponse {
-  success: boolean;
-  message: string;
-  data: IBook[];
 }

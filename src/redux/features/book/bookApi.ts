@@ -1,5 +1,5 @@
 import { baseApi } from "@/redux/api/baseApi";
-import type { IBook, IBookResponse } from "@/types/types";
+import type { IBook, IBookResponse, ISingleBookResponse } from "@/types/types";
 
 export const bookApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -33,8 +33,13 @@ export const bookApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["Book"],
         }),
+        getBookById: builder.query<ISingleBookResponse, string>({
+            query: (id) => `/books/${id}`,
+            providesTags: ["Book"],
+        }),
+
     }),
     overrideExisting: false
 })
 
-export const { useGetBooksQuery, useAddBookMutation, useUpdateBookMutation, useDeleteBookMutation } = bookApi
+export const { useGetBooksQuery, useAddBookMutation, useUpdateBookMutation, useDeleteBookMutation,useGetBookByIdQuery } = bookApi
