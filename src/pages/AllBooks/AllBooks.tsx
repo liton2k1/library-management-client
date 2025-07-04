@@ -7,7 +7,7 @@ import {
   useDeleteBookMutation,
 } from "@/redux/features/book/bookApi";
 
-const Home = () => {
+const AllBooks = () => {
   const { data, isLoading, isError } = useGetBooksQuery(undefined);
   const [deleteBook] = useDeleteBookMutation();
 
@@ -31,4 +31,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default AllBooks;

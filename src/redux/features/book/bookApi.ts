@@ -1,14 +1,13 @@
 import { baseApi } from "@/redux/api/baseApi";
-import type { IBook, IBookResponse, ISingleBookResponse } from "@/types/types";
 
 export const bookApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getBooks: builder.query<IBookResponse, void>({
+        getBooks: builder.query({
             query: () => "/books",
             providesTags: ["Book"],
         }),
 
-        addBook: builder.mutation<IBook, Partial<IBook>>({
+        addBook: builder.mutation({
             query: (data) => ({
                 url: "/books",
                 method: "POST",
@@ -17,7 +16,7 @@ export const bookApi = baseApi.injectEndpoints({
             invalidatesTags: ["Book"],
         }),
 
-        updateBook: builder.mutation<IBook, { id: string; data: Partial<IBook> }>({
+        updateBook: builder.mutation({
             query: ({ id, data }) => ({
                 url: `/books/${id}`,
                 method: "PUT",
@@ -26,15 +25,18 @@ export const bookApi = baseApi.injectEndpoints({
             invalidatesTags: ["Book"],
         }),
 
-        deleteBook: builder.mutation<{ success: boolean; id: string }, string>({
+        deleteBook: builder.mutation({
             query: (id) => ({
                 url: `/books/${id}`,
                 method: "DELETE",
             }),
             invalidatesTags: ["Book"],
         }),
-        getBookById: builder.query<ISingleBookResponse, string>({
-            query: (id) => `/books/${id}`,
+        getBookById: builder.query({
+            query: (id) => ({
+                url: `/books/${id}`,
+                method: "GET",
+            }),
             providesTags: ["Book"],
         }),
 
@@ -42,4 +44,4 @@ export const bookApi = baseApi.injectEndpoints({
     overrideExisting: false
 })
 
-export const { useGetBooksQuery, useAddBookMutation, useUpdateBookMutation, useDeleteBookMutation,useGetBookByIdQuery } = bookApi
+export const { useGetBooksQuery, useAddBookMutation, useUpdateBookMutation, useDeleteBookMutation, useGetBookByIdQuery } = bookApi

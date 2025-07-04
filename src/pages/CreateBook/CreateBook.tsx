@@ -1,7 +1,5 @@
 "use client";
 import { useAddBookMutation } from "@/redux/features/book/bookApi";
-import type { IBookRequest } from "@/types/types";
-
 import {
   Form,
   FormControl,
@@ -20,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
+import { useForm, type FieldValues } from "react-hook-form";
 
 const genreOptions = [
   { value: "FANTASY", label: "Fantasy" },
@@ -31,20 +29,20 @@ const genreOptions = [
 ];
 
 const CreateBook = () => {
-  const form = useForm<IBookRequest>({
+  const form = useForm({
     defaultValues: {
       title: "",
       author: "",
       genre: "",
       isbn: "",
       description: "",
-      copies: 1,
+      copies: "",
     },
   });
 
   const [addBook, { isLoading, isError, isSuccess }] = useAddBookMutation();
 
-  async function onSubmit(data: IBookRequest) {
+  async function onSubmit(data: FieldValues) {
     try {
       await addBook(data).unwrap();
       form.reset();
@@ -55,8 +53,8 @@ const CreateBook = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-md shadow-md my-10">
-      <h1 className="text-2xl font-bold mb-6">Create Book</h1>
+    <div className="max-w-2xl mx-auto p-5 bg-white rounded-md border border-gray-300 my-10">
+      <h1 className="text-2xl text-center font-bold mb-5">Create Book</h1>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
@@ -137,21 +135,6 @@ const CreateBook = () => {
 
           <FormField
             control={form.control}
-            name="description"
-            rules={{ required: "Description is required" }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea placeholder="Brief description" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
             name="copies"
             rules={{
               required: "Copies is required",
@@ -166,7 +149,23 @@ const CreateBook = () => {
                     min={1}
                     {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
+                    placeholder="Number of copies"
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="description"
+            rules={{ required: "Description is required" }}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Brief description" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
