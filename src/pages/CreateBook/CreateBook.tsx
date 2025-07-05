@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useForm, type FieldValues } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { toast } from "react-hot-toast";
 
 const genreOptions = [
   { value: "FANTASY", label: "Fantasy" },
@@ -26,9 +28,11 @@ const genreOptions = [
   { value: "HISTORY", label: "History" },
   { value: "FICTION", label: "Fiction" },
   { value: "NONFICTION", label: "Non-fiction" },
+  { value: "BIOGRAPHY", label: "Biography" },
 ];
 
 const CreateBook = () => {
+  const navigate = useNavigate();
   const form = useForm({
     defaultValues: {
       title: "",
@@ -40,15 +44,17 @@ const CreateBook = () => {
     },
   });
 
-  const [addBook, { isLoading, isError, isSuccess }] = useAddBookMutation();
+  const [addBook, { isLoading }] = useAddBookMutation();
 
   async function onSubmit(data: FieldValues) {
     try {
       await addBook(data).unwrap();
       form.reset();
-      alert("Book created successfully!");
+      toast.success("Book created successfully!");
+      navigate("/");
     } catch (error) {
-      console.error("Failed to create book:", error);
+      toast.error("Failed to create book");
+      console.error("Failed to create book", error);
     }
   }
 
@@ -145,7 +151,6 @@ const CreateBook = () => {
                 <FormLabel>Copies</FormLabel>
                 <FormControl>
                   <Input
-                    type="number"
                     min={1}
                     {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
@@ -175,18 +180,6 @@ const CreateBook = () => {
           <Button type="submit" disabled={isLoading} className="w-full">
             {isLoading ? "Creating..." : "Create Book"}
           </Button>
-
-          {isError && (
-            <p className="text-red-600 text-center mt-2">
-              Failed to create book. Please try again.
-            </p>
-          )}
-
-          {isSuccess && (
-            <p className="text-green-600 text-center mt-2">
-              Book created successfully!
-            </p>
-          )}
         </form>
       </Form>
     </div>

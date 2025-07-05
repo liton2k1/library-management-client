@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useForm, type FieldValues } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const genreOptions = [
   { value: "FANTASY", label: "Fantasy" },
@@ -42,8 +43,7 @@ const EditBook = () => {
   const { data: book, isLoading } = useGetBookByIdQuery(id as string, {
     skip: !id,
   });
-  const [updateBook, { isLoading: isUpdating, isSuccess }] =
-    useUpdateBookMutation();
+  const [updateBook, { isLoading: isUpdating }] = useUpdateBookMutation();
 
   const form = useForm({
     values: book?.data || {
@@ -59,14 +59,16 @@ const EditBook = () => {
   const onSubmit = async (data: FieldValues) => {
     try {
       await updateBook({ id: id as string, data }).unwrap();
+      toast.success("Book updated successfully!");
       navigate("/");
     } catch (error) {
-      console.error("Update failed", error);
+      toast.error("Failed to update book");
+      console.error("Failed to update book", error);
     }
   };
 
   if (isLoading || !book) {
-    return <div className="text-center">Loading book details...</div>;
+    return <div className="text-center">Loading...</div>;
   }
 
   return (
@@ -161,7 +163,6 @@ const EditBook = () => {
                 <FormLabel>Copies</FormLabel>
                 <FormControl>
                   <Input
-                    type="number"
                     min={1}
                     {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
@@ -191,12 +192,6 @@ const EditBook = () => {
           <Button type="submit" disabled={isUpdating} className="w-full">
             {isUpdating ? "Updating..." : "Update Book"}
           </Button>
-
-          {isSuccess && (
-            <p className="text-green-600 text-center mt-2">
-              Book updated successfully!
-            </p>
-          )}
         </form>
       </Form>
     </div>

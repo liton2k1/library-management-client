@@ -27,28 +27,28 @@ const BookTable: React.FC<BookTableProps> = ({ books, onDelete, onBorrow }) => {
         <tbody className="divide-y divide-gray-200">
           {books.map((book) => (
             <tr key={book._id}>
-              <td className="px-4 py-3 text-gray-700 text-left">
+              <td className="px-4 py-3 text-gray-700 text-left whitespace-nowrap">
                 {book.title}
               </td>
-              <td className="px-4 py-3 text-gray-700 text-left">
+              <td className="px-4 py-3 text-gray-700 text-left whitespace-nowrap">
                 {book.author}
               </td>
-              <td className="px-4 py-3 text-gray-700 text-center">
+              <td className="px-4 py-3 text-gray-700 text-center whitespace-nowrap">
                 {book.genre}
               </td>
-              <td className="px-4 py-3 text-gray-700 text-center">
+              <td className="px-4 py-3 text-gray-700 text-center whitespace-nowrap">
                 {book.isbn}
               </td>
-              <td className="px-4 py-3 text-gray-700 text-center">
+              <td className="px-4 py-3 text-gray-700 text-center whitespace-nowrap">
                 {book.copies}
               </td>
-              <td className="px-4 py-3 text-gray-700 text-center">
-                {book.available ? "Yes" : "No"}
+              <td className="px-4 py-3 text-gray-700 text-center whitespace-nowrap">
+                {book.copies !== 0 ? "Yes" : "No"}
               </td>
 
-              <td className="px-4 py-3 text-right space-x-2">
+              <td className="px-4 py-3 md:flex gap-2 justify-end flex flex-wrap">
                 <NavLink to={`/edit-book/${book._id}`}>
-                  <Button size="sm" variant="outline">
+                  <Button size="sm" variant="success">
                     Edit
                   </Button>
                 </NavLink>

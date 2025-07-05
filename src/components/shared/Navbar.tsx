@@ -1,5 +1,5 @@
 "use client";
-import { Menu } from "lucide-react";
+import { Menu, BookOpen } from "lucide-react"; // ✅ Import Book icon
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -20,8 +20,9 @@ const Navbar = () => {
       <Container>
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <NavLink to="/" className="text-xl font-bold">
-            MyStore
+          <NavLink to="/" className="flex items-center gap-2">
+            <BookOpen className="w-10 h-10" />
+            <span className="text-lg font-semibold">BookHub</span>
           </NavLink>
 
           {/* Desktop Nav */}
@@ -30,7 +31,7 @@ const Navbar = () => {
               <NavLink
                 key={item.href}
                 to={item.href}
-                className="text-sm font-medium hover:text-blue-600 transition"
+                className="text-sm font-medium"
               >
                 {item.label}
               </NavLink>

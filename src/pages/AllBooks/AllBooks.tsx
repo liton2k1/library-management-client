@@ -22,7 +22,7 @@ const AllBooks = () => {
   };
 
   if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading books</div>;
+  if (isError) return <div>Failed to fetch books</div>;
 
   return (
     <Container>

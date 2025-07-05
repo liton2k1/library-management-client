@@ -16,7 +16,7 @@ export const borrowApi = baseApi.injectEndpoints({
                 method: "POST",
                 body: { book: bookId, quantity, dueDate },
             }),
-            invalidatesTags: ["Borrow"],
+            invalidatesTags: ["Borrow", "Book"],
         }),
     }),
     overrideExisting: false,

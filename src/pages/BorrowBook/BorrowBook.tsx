@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import type { IBook } from "@/types/types";
+import toast from "react-hot-toast";
 
 interface BorrowFormInputs {
   quantity: number;
@@ -33,13 +34,13 @@ const BorrowBook: React.FC = () => {
     }
   );
 
-  const book: IBook | undefined = data?.data;
+  const book: IBook = data?.data || [];
 
-  const [borrowBook, { isLoading, isSuccess, error }] = useBorrowBookMutation();
+  const [borrowBook, { isLoading }] = useBorrowBookMutation();
 
   const form = useForm<BorrowFormInputs>({
     defaultValues: {
-      quantity: 1,
+      quantity: undefined,
       dueDate: "",
     },
   });
@@ -47,7 +48,7 @@ const BorrowBook: React.FC = () => {
   const onSubmit = async (data: BorrowFormInputs) => {
     if (!book) return;
     if (data.quantity > book.copies) {
-      alert(`Quantity cannot exceed available copies (${book.copies})`);
+      toast.error(`Quantity cannot exceed available copies (${book.copies})`);
       return;
     }
 
@@ -57,21 +58,21 @@ const BorrowBook: React.FC = () => {
         quantity: data.quantity,
         dueDate: data.dueDate,
       }).unwrap();
-      alert("Book borrowed successfully!");
+      toast.success("Book borrowed successfully!");
       navigate("/borrow-summary");
-    } catch (err) {
-      alert("Failed to borrow book, try again.");
-      console.error(err);
+    } catch (error) {
+      toast.error("Failed to borrow book");
+      console.error("Failed to borrow book", error);
     }
   };
 
   if (bookLoading || !book) {
-    return <p className="text-center mt-10">Loading book info...</p>;
+    return <p className="text-center mt-10">Loading...</p>;
   }
 
   return (
     <div className="min-h-screen flex items-center">
-      <div className="w-full max-w-md mx-auto p-5 bg-white rounded-md shadow">
+      <div className="w-full max-w-md mx-auto p-5 bg-white rounded-md border border-gray-300">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <FormField
@@ -89,7 +90,12 @@ const BorrowBook: React.FC = () => {
                 <FormItem>
                   <FormLabel>Quantity</FormLabel>
                   <FormControl>
-                    <Input type="number" min={1} max={book.copies} {...field} />
+                    <Input
+                      min={1}
+                      max={book.copies}
+                      {...field}
+                      placeholder="Quantity"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -114,13 +120,6 @@ const BorrowBook: React.FC = () => {
             <Button type="submit" disabled={isLoading} className="w-full">
               {isLoading ? "Borrowing..." : "Borrow Book"}
             </Button>
-
-            {error && (
-              <p className="text-red-600 mt-2">Failed to borrow book.</p>
-            )}
-            {isSuccess && (
-              <p className="text-green-600 mt-2">Borrowed successfully!</p>
-            )}
           </form>
         </Form>
       </div>

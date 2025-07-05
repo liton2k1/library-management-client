@@ -21,12 +21,21 @@ const Home = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading books</div>;
+  if (isLoading) return <div className="text-center mt-10">Loading...</div>;
+  if (isError)
+    return (
+      <div className="text-center text-red-500 mt-10">Error loading books</div>
+    );
 
   return (
     <Container>
-      <BookTable books={books} onDelete={handleDelete} onBorrow={() => {}} />
+      {books.length === 0 ? (
+        <div className="text-center text-gray-600 mt-10 text-lg">
+          No books found. Please add some books.
+        </div>
+      ) : (
+        <BookTable books={books} onDelete={handleDelete} onBorrow={() => {}} />
+      )}
     </Container>
   );
 };
