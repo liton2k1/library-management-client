@@ -32,7 +32,7 @@ const genreOptions = [
   { value: "SCIENCE", label: "Science" },
   { value: "HISTORY", label: "History" },
   { value: "FICTION", label: "Fiction" },
-  { value: "NONFICTION", label: "Non-fiction" },
+  { value: "NON_FICTION", label: "Non-fiction" },
 ];
 
 const EditBook = () => {
@@ -43,6 +43,7 @@ const EditBook = () => {
   const { data: book, isLoading } = useGetBookByIdQuery(id as string, {
     skip: !id,
   });
+  console.log(book);
   const [updateBook, { isLoading: isUpdating }] = useUpdateBookMutation();
 
   const form = useForm({
@@ -116,7 +117,7 @@ const EditBook = () => {
                 <FormLabel>Genre</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value || ""}
+                  defaultValue={book?.data?.genre || ""}
                 >
                   <FormControl>
                     <SelectTrigger className="w-full">

@@ -27,7 +27,7 @@ const genreOptions = [
   { value: "SCIENCE", label: "Science" },
   { value: "HISTORY", label: "History" },
   { value: "FICTION", label: "Fiction" },
-  { value: "NONFICTION", label: "Non-fiction" },
+  { value: "NON_FICTION", label: "Non-fiction" },
   { value: "BIOGRAPHY", label: "Biography" },
 ];
 

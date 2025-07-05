@@ -2,6 +2,7 @@ import type { IBook } from "@/types/types";
 import { NavLink } from "react-router";
 import { Button } from "./ui/button";
 import ConfirmDialog from "./ConfirmDialog";
+import { BookOpenCheck, SquarePen, Trash2, View } from "lucide-react";
 
 interface BookTableProps {
   books: IBook[];
@@ -34,8 +35,12 @@ const BookTable: React.FC<BookTableProps> = ({ books, onDelete, onBorrow }) => {
                 {book.author}
               </td>
               <td className="px-4 py-3 text-gray-700 text-center whitespace-nowrap">
-                {book.genre}
+                {book.genre
+                  .toLowerCase()
+                  .replace(/_/g, " ")
+                  .replace(/\b\w/g, (char) => char.toUpperCase())}
               </td>
+
               <td className="px-4 py-3 text-gray-700 text-center whitespace-nowrap">
                 {book.isbn}
               </td>
@@ -46,27 +51,36 @@ const BookTable: React.FC<BookTableProps> = ({ books, onDelete, onBorrow }) => {
                 {book.copies !== 0 ? "Yes" : "No"}
               </td>
 
-              <td className="px-4 py-3 md:flex gap-2 justify-end flex flex-wrap">
-                <NavLink to={`/edit-book/${book._id}`}>
-                  <Button size="sm" variant="success">
-                    Edit
+              <td className="px-4 py-3 flex justify-end gap-2">
+                <NavLink to={`/book-details/${book._id}`} title="View Book">
+                  <Button size="sm" variant="outline">
+                    <View className="w-4 h-4 text-blue-600" />
                   </Button>
                 </NavLink>
+
+                <NavLink to={`/edit-book/${book._id}`} title="Edit Book">
+                  <Button size="sm" variant="outline">
+                    <SquarePen className="w-4 h-4 text-emerald-600" />
+                  </Button>
+                </NavLink>
+
                 <ConfirmDialog
                   onConfirm={() => onDelete(book._id)}
                   trigger={
-                    <Button size="sm" variant="destructive">
-                      Delete
+                    <Button size="sm" variant="outline" title="Delete Book">
+                      <Trash2 className="w-4 h-4 text-red-600" />
                     </Button>
                   }
                 />
-                <NavLink to={`/borrow-book/${book._id}`}>
+
+                <NavLink to={`/borrow-book/${book._id}`} title="Borrow Book">
                   <Button
                     size="sm"
+                    variant="outline"
                     onClick={() => onBorrow(book)}
                     disabled={!book.available || book.copies === 0}
                   >
-                    Borrow
+                    <BookOpenCheck className="w-4 h-4 text-indigo-600" />
                   </Button>
                 </NavLink>
               </td>
